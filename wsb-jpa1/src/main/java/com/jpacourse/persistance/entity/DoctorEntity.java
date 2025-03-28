@@ -3,6 +3,7 @@ package com.jpacourse.persistance.entity;
 import com.jpacourse.persistance.enums.Specialization;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "DOCTOR")
@@ -26,9 +27,12 @@ public class DoctorEntity {
 	@Column(nullable = false)
 	private String doctorNumber;
 
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private Specialization specialization;
+
+	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (DoctorEntity - VisitEntity)
+	private List<VisitEntity> visits;
 
 	public Long getId() {
 		return id;
