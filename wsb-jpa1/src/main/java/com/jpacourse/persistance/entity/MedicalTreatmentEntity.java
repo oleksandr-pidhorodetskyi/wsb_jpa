@@ -18,6 +18,10 @@ public class MedicalTreatmentEntity {
 	@Enumerated(EnumType.STRING)
 	private TreatmentType type;
 
+	@ManyToOne(optional = false, fetch = FetchType.LAZY) // Dwustronna relacja (VisitEntity - MedicalTreatmentEntity)
+	@JoinColumn(name = "VISIT_ID")
+	private VisitEntity visit;
+
 	public Long getId() {
 		return id;
 	}

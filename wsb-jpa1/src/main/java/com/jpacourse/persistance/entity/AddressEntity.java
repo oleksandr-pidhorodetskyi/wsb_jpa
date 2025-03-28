@@ -11,13 +11,24 @@ public class AddressEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false)
 	private String city;
 
+	@Column(nullable = false)
 	private String addressLine1;
 
 	private String addressLine2;
 
+	@Column(nullable = false)
 	private String postalCode;
+
+	@ManyToOne// Jednokierunkowa od strony właściciela (AddressEntity)
+	@JoinColumn(name = "DOCTOR_ID")
+	private DoctorEntity doctor;
+
+	@ManyToOne// Jednokierunkowa od strony właściciela (AddressEntity)
+	@JoinColumn(name = "PATIENT_ID")
+	private PatientEntity patient;
 
 	public Long getId() {
 		return id;
