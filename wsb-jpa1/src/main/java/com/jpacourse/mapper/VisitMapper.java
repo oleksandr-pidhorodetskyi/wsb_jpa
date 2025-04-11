@@ -16,19 +16,21 @@ public final class VisitMapper {
         VisitTO visitTO = new VisitTO();
         visitTO.setId(entity.getId());
         visitTO.setDateTime(entity.getTime());
-        visitTO.setDescription(entity.getDescription()); // 🛠️ dodane mapowanie
+        visitTO.setDescription(entity.getDescription());
 
         if (entity.getDoctor() != null) {
-            String fullName = entity.getDoctor().getFirstName() + " " + entity.getDoctor().getLastName();
-            visitTO.setDoctorFullName(fullName);
+            visitTO.setDoctorFirstName(entity.getDoctor().getFirstName());
+            visitTO.setDoctorLastName(entity.getDoctor().getLastName());
         }
 
-        List<String> treatments = entity.getMedicalTreatments()
-                .stream()
-                .map(treatment -> treatment.getType().name())
-                .collect(Collectors.toList());
+        if (entity.getMedicalTreatments() != null) {
+            List<String> treatments = entity.getMedicalTreatments()
+                    .stream()
+                    .map(treatment -> treatment.getType().name())
+                    .collect(Collectors.toList());
 
-        visitTO.setTreatmentTypes(treatments);
+            visitTO.setTreatmentTypes(treatments);
+        }
 
         return visitTO;
     }

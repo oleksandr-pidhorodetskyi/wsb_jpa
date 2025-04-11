@@ -8,11 +8,10 @@ public class VisitTO implements Serializable {
 
     private Long id;
     private LocalDateTime dateTime;
-    private String doctorFullName;
+    private String doctorFirstName;
+    private String doctorLastName;
     private List<String> treatmentTypes;
-    private String description; // ⬅️ DODAJ TO
-
-    // Gettery i settery
+    private String description;
 
     public Long getId() {
         return id;
@@ -30,12 +29,20 @@ public class VisitTO implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public String getDoctorFullName() {
-        return doctorFullName;
+    public String getDoctorFirstName() {
+        return doctorFirstName;
     }
 
-    public void setDoctorFullName(String doctorFullName) {
-        this.doctorFullName = doctorFullName;
+    public void setDoctorFirstName(String doctorFirstName) {
+        this.doctorFirstName = doctorFirstName;
+    }
+
+    public String getDoctorLastName() {
+        return doctorLastName;
+    }
+
+    public void setDoctorLastName(String doctorLastName) {
+        this.doctorLastName = doctorLastName;
     }
 
     public List<String> getTreatmentTypes() {

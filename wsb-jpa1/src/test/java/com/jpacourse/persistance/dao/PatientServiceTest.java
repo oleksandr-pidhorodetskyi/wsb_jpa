@@ -44,9 +44,9 @@ public class PatientServiceTest {
         DoctorEntity doctor = new DoctorEntity();
         doctor.setFirstName("Gregory");
         doctor.setLastName("House");
-        doctor.setDoctorNumber("DOC-987"); // dodane
-        doctor.setTelephoneNumber("555-123-456"); // dodane
-        doctor.setSpecialization(Specialization.GP); // dodane
+        doctor.setDoctorNumber("DOC-987");
+        doctor.setTelephoneNumber("555-123-456");
+        doctor.setSpecialization(Specialization.GP);
         entityManager.persist(doctor);
 
         patientDao.addVisitToPatient(
@@ -67,7 +67,8 @@ public class PatientServiceTest {
         assertNotNull(result.getVisits());
         assertEquals(1, result.getVisits().size());
 
-        assertTrue(result.getVisits().get(0).getDoctorFullName().contains("Gregory"));
+        assertEquals("Gregory", result.getVisits().get(0).getDoctorFirstName());
+        assertEquals("House", result.getVisits().get(0).getDoctorLastName());
         assertEquals("Kontrolna wizyta", result.getVisits().get(0).getDescription());
     }
 }
