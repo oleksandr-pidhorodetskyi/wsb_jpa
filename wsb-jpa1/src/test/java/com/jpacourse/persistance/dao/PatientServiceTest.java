@@ -1,9 +1,9 @@
 package com.jpacourse.persistance.dao;
 
 import com.jpacourse.dto.PatientTO;
-import com.jpacourse.persistance.dao.PatientDao;
 import com.jpacourse.persistance.entity.DoctorEntity;
 import com.jpacourse.persistance.entity.PatientEntity;
+import com.jpacourse.persistance.enums.Specialization;
 import com.jpacourse.service.PatientService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -44,7 +44,10 @@ public class PatientServiceTest {
         DoctorEntity doctor = new DoctorEntity();
         doctor.setFirstName("Gregory");
         doctor.setLastName("House");
-        entityManager.persist(doctor); // zamiast DoctorDao
+        doctor.setDoctorNumber("DOC-987"); // dodane
+        doctor.setTelephoneNumber("555-123-456"); // dodane
+        doctor.setSpecialization(Specialization.GP); // dodane
+        entityManager.persist(doctor);
 
         patientDao.addVisitToPatient(
                 patient.getId(),

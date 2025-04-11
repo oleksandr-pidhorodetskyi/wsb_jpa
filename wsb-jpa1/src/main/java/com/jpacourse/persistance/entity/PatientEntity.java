@@ -3,6 +3,8 @@ package com.jpacourse.persistance.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +36,7 @@ public class PatientEntity {
 	private boolean active;
 
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (PatientEntity - VisitEntity)
-	private List<VisitEntity> visits;
+	private List<VisitEntity> visits = new ArrayList<>();
 
 	public Long getId() {
 		return id;

@@ -16,6 +16,7 @@ public final class VisitMapper {
         VisitTO visitTO = new VisitTO();
         visitTO.setId(entity.getId());
         visitTO.setDateTime(entity.getTime());
+        visitTO.setDescription(entity.getDescription()); // 🛠️ dodane mapowanie
 
         if (entity.getDoctor() != null) {
             String fullName = entity.getDoctor().getFirstName() + " " + entity.getDoctor().getLastName();
@@ -28,6 +29,7 @@ public final class VisitMapper {
                 .collect(Collectors.toList());
 
         visitTO.setTreatmentTypes(treatments);
+
         return visitTO;
     }
 }

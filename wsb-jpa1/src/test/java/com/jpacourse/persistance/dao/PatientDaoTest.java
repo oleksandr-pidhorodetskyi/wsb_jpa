@@ -3,6 +3,7 @@ package com.jpacourse.persistance.dao;
 import com.jpacourse.persistance.entity.DoctorEntity;
 import com.jpacourse.persistance.entity.PatientEntity;
 import com.jpacourse.persistance.entity.VisitEntity;
+import com.jpacourse.persistance.enums.Specialization;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class PatientDaoTest {
     private PatientDao patientDao;
 
     @Autowired
-    private Dao<DoctorEntity, Long> doctorDao;
+    private DoctorDao doctorDao;
 
     @Test
     public void shouldAddVisitToPatient() {
@@ -37,6 +38,9 @@ public class PatientDaoTest {
         DoctorEntity doctor = new DoctorEntity();
         doctor.setFirstName("Dr");
         doctor.setLastName("Strange");
+        doctor.setDoctorNumber("DOC-123"); // wymagane pole
+        doctor.setTelephoneNumber("123456789"); // wymagane pole
+        doctor.setSpecialization(Specialization.GP); // wymagane pole typu enum
         doctorDao.save(doctor);
 
         // when
