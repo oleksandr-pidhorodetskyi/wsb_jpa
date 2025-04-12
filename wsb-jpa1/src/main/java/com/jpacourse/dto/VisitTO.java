@@ -1,5 +1,7 @@
 package com.jpacourse.dto;
 
+import com.jpacourse.persistance.enums.TreatmentType;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +12,7 @@ public class VisitTO implements Serializable {
     private LocalDateTime dateTime;
     private String doctorFirstName;
     private String doctorLastName;
-    private List<String> treatmentTypes;
+    private List<TreatmentType> treatmentTypes;
     private String description;
 
     public Long getId() {
@@ -45,11 +47,11 @@ public class VisitTO implements Serializable {
         this.doctorLastName = doctorLastName;
     }
 
-    public List<String> getTreatmentTypes() {
+    public List<TreatmentType> getTreatmentTypes() {
         return treatmentTypes;
     }
 
-    public void setTreatmentTypes(List<String> treatmentTypes) {
+    public void setTreatmentTypes(List<TreatmentType> treatmentTypes) {
         this.treatmentTypes = treatmentTypes;
     }
 

@@ -1,10 +1,11 @@
 package com.jpacourse.mapper;
 
 import com.jpacourse.dto.PatientTO;
+import com.jpacourse.dto.VisitTO;
 import com.jpacourse.persistance.entity.PatientEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class PatientMapper {
 
@@ -23,13 +24,12 @@ public final class PatientMapper {
         to.setDateOfBirth(entity.getDateOfBirth());
         to.setActive(entity.isActive());
 
-        if (entity.getVisits() != null) {
-            List<com.jpacourse.dto.VisitTO> visits = entity.getVisits()
-                    .stream()
-                    .map(VisitMapper::mapToTO)
-                    .collect(Collectors.toList());
-            to.setVisits(visits);
-        }
+        List<VisitTO> pastVisits = entity.getVisits().stream()
+                .filter(visit -> visit.getTime().isBefore(LocalDateTime.now()))
+                .map(VisitMapper::mapToTO)
+                .toList();
+
+        to.setPastVisits(pastVisits);
 
         return to;
     }
