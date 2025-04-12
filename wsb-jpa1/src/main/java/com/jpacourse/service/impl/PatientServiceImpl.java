@@ -5,10 +5,11 @@ import com.jpacourse.mapper.PatientMapper;
 import com.jpacourse.persistance.dao.PatientDao;
 import com.jpacourse.persistance.entity.PatientEntity;
 import com.jpacourse.service.PatientService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -31,4 +32,16 @@ public class PatientServiceImpl implements PatientService {
     public void deleteById(Long id) {
         patientDao.delete(id);
     }
+
+    @Override
+    public void addVisitToPatient(Long patientId, Long doctorId, LocalDateTime time, String description) {
+        patientDao.addVisitToPatient(patientId, doctorId, time, description);
+    }
+
+    @Override
+    public void deletePatient(Long id) {
+        PatientEntity patient = patientDao.findOne(id); // albo .findById(id).orElseThrow()
+        patientDao.delete(patient);
+    }
+
 }

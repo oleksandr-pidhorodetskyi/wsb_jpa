@@ -28,7 +28,8 @@ public class VisitEntity {
 	@JoinColumn(name = "PATIENT_ID")
 	private PatientEntity patient;
 
-	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (VisitEntity - MedicalTreatmentEntity)
+	@OneToMany(mappedBy = "visit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	// Dwustronna relacja (VisitEntity - MedicalTreatmentEntity)
 	private List<MedicalTreatmentEntity> treatments = new ArrayList<>();
 
 	public Long getId() {
@@ -69,7 +70,12 @@ public class VisitEntity {
 
 	public void setPatient(PatientEntity patient) {
 		this.patient = patient;
+
+		if (patient != null && !patient.getVisits().contains(this)) {
+			patient.getVisits().add(this); // 👈 zapewni spójność relacji
+		}
 	}
+
 
 	public List<MedicalTreatmentEntity> getMedicalTreatments() {
 		return treatments;

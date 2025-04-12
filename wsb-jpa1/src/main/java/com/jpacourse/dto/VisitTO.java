@@ -12,6 +12,7 @@ public class VisitTO implements Serializable {
     private String doctorLastName;
     private List<String> treatmentTypes;
     private String description;
+    private boolean past;
 
     public Long getId() {
         return id;
@@ -59,5 +60,13 @@ public class VisitTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isPast() {
+        return past;
+    }
+
+    public void setPast(boolean past) {
+        this.past = past;
     }
 }

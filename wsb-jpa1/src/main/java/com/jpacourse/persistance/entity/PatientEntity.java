@@ -35,7 +35,7 @@ public class PatientEntity {
 	@Column(nullable = false)
 	private boolean active;
 
-	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (PatientEntity - VisitEntity)
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true) // Dwustronna relacja (PatientEntity - VisitEntity)
 	private List<VisitEntity> visits = new ArrayList<>();
 
 	public Long getId() {
@@ -109,5 +109,11 @@ public class PatientEntity {
 	public void setVisits(List<VisitEntity> visits) {
 		this.visits = visits;
 	}
+
+	public void addVisit(VisitEntity visit) {
+		visits.add(visit);
+		visit.setPatient(this); // 👈 zapewnia relację dwukierunkową
+	}
+
 
 }

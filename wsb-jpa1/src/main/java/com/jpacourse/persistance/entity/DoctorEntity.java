@@ -31,7 +31,7 @@ public class DoctorEntity {
 	@Column(nullable = false)
 	private Specialization specialization;
 
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (DoctorEntity - VisitEntity)
+	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY) // Dwustronna relacja (DoctorEntity - VisitEntity)
 	private List<VisitEntity> visits;
 
 	public Long getId() {
