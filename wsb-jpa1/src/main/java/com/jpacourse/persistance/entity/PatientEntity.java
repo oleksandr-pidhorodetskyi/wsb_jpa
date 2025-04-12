@@ -33,6 +33,9 @@ public class PatientEntity {
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (PatientEntity - VisitEntity)
 	private List<VisitEntity> visits;
 
+	@Column(nullable = false)
+	private Boolean isInsured;
+
 	public Long getId() {
 		return id;
 	}
@@ -88,5 +91,18 @@ public class PatientEntity {
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+
+	public Boolean getIsInsured() { return  isInsured; }
+
+	public void setIsInsured(Boolean isInsured) { this.isInsured = isInsured; }
+
+	public List<VisitEntity> getVisits() {
+		return visits;
+	}
+
+	public void setVisits(List<VisitEntity> visits) {
+		this.visits = visits;
+	}
+
 
 }

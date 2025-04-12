@@ -1,13 +1,16 @@
-INSERT INTO PATIENT (id, first_name, last_name, telephone_number, email, patient_number, date_of_birth)
+-- === Pacjenci ===
+INSERT INTO PATIENT (id, first_name, last_name, telephone_number, email, patient_number, date_of_birth, is_insured)
 VALUES
-    (101, 'Jan', 'Kowalski', '123456789', 'jan.kowalski@email.com', 'P123', '1980-05-15'),
-    (102, 'Anna', 'Nowak', '987654321', 'anna.nowak@email.com', 'P124', '1992-08-25');
+    (101, 'Jan', 'Kowalski', '123456789', 'jan.kowalski@email.com', 'P123', '1980-05-15', true),
+    (102, 'Anna', 'Nowak', '987654321', 'anna.nowak@email.com', 'P124', '1992-08-25', false);
 
+-- === Lekarze ===
 INSERT INTO DOCTOR (id, first_name, last_name, telephone_number, email, doctor_number, specialization)
 VALUES
     (201, 'Piotr', 'Lewandowski', '111222333', 'piotr.lewandowski@email.com', 'D456', 'OCULIST'),
     (202, 'Maria', 'Wiśniewska', '444555666', 'maria.wisniewska@email.com', 'D789', 'DERMATOLOGIST');
 
+-- === Adresy ===
 INSERT INTO ADDRESS (id, address_line1, address_line2, city, postal_code, patient_id, doctor_id)
 VALUES
     (901, 'ul. Klonowa 10', 'mieszkanie 5', 'Warszawa', '00-001', 101, NULL),
@@ -16,14 +19,14 @@ VALUES
     (904, 'ul. Modrzewiowa 30', 'blok 3A', 'Warszawa', '00-006', NULL, 201),
     (905, 'ul. Kasztanowa 25', 'gabinet prywatny', 'Poznań', '60-005', NULL, 202);
 
+-- === Wizyty ===
 INSERT INTO VISIT (id, description, time, doctor_id, patient_id)
 VALUES
     (301, 'Konsultacja kardiologiczna', '2024-04-10 10:30:00', 201, 101),
     (302, 'Badanie kontrolne', '2024-04-11 15:00:00', 202, 102);
 
+-- === Leczenia ===
 INSERT INTO MEDICAL_TREATMENT (id, description, type, visit_id)
 VALUES
     (401, 'Angioplastyka', 'EKG', 301),
     (402, 'Terapia laserowa', 'RTG', 302);
-
-
