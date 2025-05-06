@@ -4,10 +4,14 @@ import com.jpacourse.persistance.entity.DoctorEntity;
 import com.jpacourse.persistance.entity.PatientEntity;
 import com.jpacourse.persistance.entity.VisitEntity;
 import com.jpacourse.persistance.enums.Specialization;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.OptimisticLockingFailureException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +27,9 @@ public class PatientDaoTest {
 
     @Autowired
     private DoctorDao doctorDao;
+
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     @Test
     public void shouldAddVisitToPatientAndCascadeUpdate() {
@@ -99,5 +106,43 @@ public class PatientDaoTest {
         for (PatientEntity patient : inactivePatients) {
             assertFalse(patient.isActive(), "Pacjent powinien być nieaktywny");
         }
+    }
+
+    @Test
+    public void shouldThrowOptimisticLockException() {
+        // Session 1: odczyt i aktualizacja
+        EntityManager em1 = entityManagerFactory.createEntityManager();
+        em1.getTransaction().begin();
+        PatientEntity p1 = em1.find(PatientEntity.class, 101L);
+        em1.getTransaction().commit();
+        em1.close();
+
+        // Session 2: równoległy odczyt
+        EntityManager em2 = entityManagerFactory.createEntityManager();
+        em2.getTransaction().begin();
+        PatientEntity p2 = em2.find(PatientEntity.class, 101L);
+        em2.getTransaction().commit();
+        em2.close();
+
+        // Zmiana i zapis p1 - inkrementacja version
+        em1 = entityManagerFactory.createEntityManager();
+        em1.getTransaction().begin();
+        p1.setFirstName("Janek");
+        p1 = em1.merge(p1);
+        em1.getTransaction().commit();
+        em1.close();
+
+        // Próba zapisu p2 z przestarzałym version → wyjątek
+        em2 = entityManagerFactory.createEntityManager();
+        em2.getTransaction().begin();
+        p2.setFirstName("Janusz");
+
+        EntityManager finalEm = em2;
+        assertThrows(OptimisticLockException.class, () -> {
+            finalEm.merge(p2); // to powinno rzucić wyjątek
+            finalEm.getTransaction().commit(); // wyjątek rzuci się tu
+        });
+
+        em2.close();
     }
 }

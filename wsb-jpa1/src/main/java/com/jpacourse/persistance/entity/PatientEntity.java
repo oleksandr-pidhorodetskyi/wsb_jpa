@@ -3,6 +3,8 @@ package com.jpacourse.persistance.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +37,15 @@ public class PatientEntity {
 	@Column(nullable = false)
 	private boolean active;
 
-	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (PatientEntity - VisitEntity)
-	private List<VisitEntity> visits = new ArrayList<>();
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
+	private List<VisitEntity> visits;
 
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE, orphanRemoval = true) // Dwustronna relacja (PatientEntity - AddressEntity)
 	private List<AddressEntity> addresses = new ArrayList<>();
+
+	@Version
+	private int version;
 
 	public Long getId() {
 		return id;
@@ -120,4 +126,16 @@ public class PatientEntity {
 	public void setAddresses(List<AddressEntity> addresses) {
 		this.addresses = addresses;
 	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
 }
+
+// Wnioski:
+// FetchMode.SELECT: W logach widać jedno zapytanie po pacjenta oraz osobne zapytania po wizyty, lekarzy i zabiegi – czyli łącznie wiele SELECT-ów. To efekt użycia @Fetch(FetchMode.SELECT) i FetchType.EAGER, co skutkuje problemem N+1.
+// FetchMode.JOIN: Używa jednego zapytania z JOIN-em, aby pobrać pacjenta wraz z jego wizytami w jednym zapytaniu SQL. Dzięki temu unikamy problemu N+1 zapytań i poprawiamy wydajność, szczególnie w przypadku wielu powiązanych encji.

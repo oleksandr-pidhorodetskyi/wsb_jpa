@@ -120,3 +120,7 @@ public class PatientServiceTest {
         assertNotNull(visitTO.getDescription(), "Opis wizyty nie powinien być null");
     }
 }
+
+// Wnioski:
+// FetchMode.SELECT: W logach widać jedno zapytanie po pacjenta oraz osobne zapytania po wizyty, lekarzy i zabiegi – czyli łącznie wiele SELECT-ów. To efekt użycia @Fetch(FetchMode.SELECT) i FetchType.EAGER, co skutkuje problemem N+1.
+// FetchMode.JOIN: Używa jednego zapytania z JOIN-em, aby pobrać pacjenta wraz z jego wizytami w jednym zapytaniu SQL. Dzięki temu unikamy problemu N+1 zapytań i poprawiamy wydajność, szczególnie w przypadku wielu powiązanych encji.

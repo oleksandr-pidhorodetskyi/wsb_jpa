@@ -28,6 +28,7 @@ public final class PatientMapper {
                         .map(VisitMapper::mapToTO)
                         .toList()
         );
+        to.setVersion(entity.getVersion());
 
         return to;
     }
