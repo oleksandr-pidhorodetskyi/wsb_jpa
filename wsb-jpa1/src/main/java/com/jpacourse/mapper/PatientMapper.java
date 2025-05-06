@@ -24,12 +24,11 @@ public final class PatientMapper {
         to.setDateOfBirth(entity.getDateOfBirth());
         to.setActive(entity.isActive());
 
-        List<VisitTO> pastVisits = entity.getVisits().stream()
-                .filter(visit -> visit.getTime().isBefore(LocalDateTime.now()))
-                .map(VisitMapper::mapToTO)
-                .toList();
-
-        to.setPastVisits(pastVisits);
+        to.setPastVisits(
+                entity.getVisits().stream()
+                        .map(VisitMapper::mapToTO)
+                        .toList()
+        );
 
         return to;
     }

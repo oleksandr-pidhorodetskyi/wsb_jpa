@@ -26,42 +26,28 @@ public class PatientDaoTest {
     @Test
     public void shouldAddVisitToPatientAndCascadeUpdate() {
         // given
-        // Tworzymy pacjenta
-        PatientEntity patient = new PatientEntity();
-        patient.setFirstName("Kasia");
-        patient.setLastName("Testowa");
-        patient.setTelephoneNumber("888999000");
-        patient.setPatientNumber("PAT-01");
-        patient.setDateOfBirth(LocalDateTime.now().toLocalDate());
-        patient.setActive(true);
-        patient = patientDao.save(patient);  // Pacjent zapisany do bazy
-
-        // Tworzymy doktora
-        DoctorEntity doctor = new DoctorEntity();
-        doctor.setFirstName("Dr");
-        doctor.setLastName("Strange");
-        doctor.setDoctorNumber("DOC-123");
-        doctor.setTelephoneNumber("123456789");
-        doctor.setSpecialization(Specialization.GP);
-        doctor = doctorDao.save(doctor);  // Doktor zapisany do bazy
+        // Zapisany pacjent
+        Long patientId = 101L; // Jan Kowalski
+        Long doctorId = 201L;  // Piotr Lewandowski
 
         // when
-        // Dodajemy wizytę dla pacjenta
-        patientDao.addVisitToPatient(patient.getId(), doctor.getId(), LocalDateTime.now(), "Opis testowej wizyty");
+        patientDao.addVisitToPatient(patientId, doctorId, LocalDateTime.now(), "Nowa wizyta testowa");
 
         // then
-        // Ładujemy pacjenta z bazy i sprawdzamy wizyty
-        PatientEntity loadedPatient = patientDao.findOne(patient.getId());
+        PatientEntity loadedPatient = patientDao.findOne(patientId);
+        assertNotNull(loadedPatient, "Pacjent powinien istnieć");
+
+        // Sprawdzamy czy pacjent ma co najmniej jedną wizytę (w tym nową)
         assertNotNull(loadedPatient.getVisits(), "Lista wizyt pacjenta nie powinna być null");
-        assertEquals(1, loadedPatient.getVisits().size(), "Pacjent powinien mieć dokładnie jedną wizytę");
+        assertTrue(loadedPatient.getVisits().size() > 0, "Pacjent powinien mieć co najmniej jedną wizytę");
 
-        // Pobieramy pierwszą wizytę i sprawdzamy szczegóły
-        VisitEntity visit = loadedPatient.getVisits().get(0);
-        assertNotNull(visit, "Wizyta powinna być przypisana do pacjenta");
-        assertEquals("Opis testowej wizyty", visit.getDescription(), "Opis wizyty powinien być zgodny");
-        assertEquals(doctor.getId(), visit.getDoctor().getId(), "ID doktora przypisanego do wizyty powinno być zgodne");
+        VisitEntity addedVisit = loadedPatient.getVisits().stream()
+                .filter(v -> "Nowa wizyta testowa".equals(v.getDescription()))
+                .findFirst()
+                .orElse(null);
 
-        // Sprawdzamy, czy pacjent został poprawnie zapisany (merge powinno nastąpić)
-        assertTrue(loadedPatient.getVisits().contains(visit), "Pacjent powinien zawierać tę wizytę");
+        assertNotNull(addedVisit, "Nowa wizyta powinna zostać dodana do pacjenta");
+        assertEquals(doctorId, addedVisit.getDoctor().getId(), "Wizyta powinna być przypisana do właściwego doktora");
     }
+
 }

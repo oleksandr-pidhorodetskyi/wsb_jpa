@@ -38,6 +38,9 @@ public class PatientEntity {
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Dwustronna relacja (PatientEntity - VisitEntity)
 	private List<VisitEntity> visits = new ArrayList<>();
 
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE, orphanRemoval = true) // Dwustronna relacja (PatientEntity - AddressEntity)
+	private List<AddressEntity> addresses = new ArrayList<>();
+
 	public Long getId() {
 		return id;
 	}
@@ -110,4 +113,11 @@ public class PatientEntity {
 		this.visits = visits;
 	}
 
+	public List<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressEntity> addresses) {
+		this.addresses = addresses;
+	}
 }

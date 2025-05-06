@@ -22,11 +22,11 @@ public class AddressEntity {
 	@Column(nullable = false)
 	private String postalCode;
 
-	@ManyToOne// Jednokierunkowa od strony właściciela (AddressEntity)
+	@ManyToOne
 	@JoinColumn(name = "DOCTOR_ID")
 	private DoctorEntity doctor;
 
-	@ManyToOne// Jednokierunkowa od strony właściciela (AddressEntity)
+	@ManyToOne
 	@JoinColumn(name = "PATIENT_ID")
 	private PatientEntity patient;
 
