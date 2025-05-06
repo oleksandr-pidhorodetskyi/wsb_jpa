@@ -23,8 +23,7 @@ public final class PatientMapper {
         to.setPatientNumber(entity.getPatientNumber());
         to.setDateOfBirth(entity.getDateOfBirth());
         to.setActive(entity.isActive());
-
-        to.setPastVisits(
+        to.setVisits(
                 entity.getVisits().stream()
                         .map(VisitMapper::mapToTO)
                         .toList()

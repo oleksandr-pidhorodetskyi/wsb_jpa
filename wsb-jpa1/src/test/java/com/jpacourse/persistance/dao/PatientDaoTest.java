@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,4 +51,53 @@ public class PatientDaoTest {
         assertEquals(doctorId, addedVisit.getDoctor().getId(), "Wizyta powinna być przypisana do właściwego doktora");
     }
 
+    @Test
+    public void shouldFindPatientsByLastName() {
+        // given
+        String lastName = "Kowalski"; // Przykładowe nazwisko
+
+        // when
+        List<PatientEntity> foundPatients = patientDao.findByLastName(lastName);
+
+        // then
+        assertNotNull(foundPatients, "Lista pacjentów nie powinna być null");
+        assertFalse(foundPatients.isEmpty(), "Lista pacjentów nie powinna być pusta");
+
+        // Sprawdzamy, czy pacjenci mają odpowiednie nazwisko
+        for (PatientEntity patient : foundPatients) {
+            assertEquals(lastName, patient.getLastName(), "Nazwisko pacjenta powinno być równe: " + lastName);
+        }
+    }
+
+    @Test
+    public void shouldFindPatientsWithMoreThanXVisits() {
+        // given
+        int x = 2;  // patients with more than 2 visits
+
+        // when
+        List<PatientEntity> patients = patientDao.findPatientsWithMoreThanXVisits(x);
+
+        // then
+        assertNotNull(patients, "Lista pacjentów nie powinna być null");
+        assertFalse(patients.isEmpty(), "Lista pacjentów nie powinna być pusta");
+
+        // Dodatkowe sprawdzenie, czy pacjenci mają więcej niż X wizyt
+        for (PatientEntity patient : patients) {
+            assertTrue(patient.getVisits().size() > x, "Pacjent powinien mieć więcej niż " + x + " wizyt");
+        }
+    }
+
+    @Test
+    public void shouldFindInactivePatientsUsingNegation() {
+        // when
+        List<PatientEntity> inactivePatients = patientDao.findInactivePatientsUsingNegation();
+
+        // then
+        assertNotNull(inactivePatients, "Lista pacjentów nie powinna być nullem");
+        assertFalse(inactivePatients.isEmpty(), "Lista pacjentów nie powinna być pusta");
+
+        for (PatientEntity patient : inactivePatients) {
+            assertFalse(patient.isActive(), "Pacjent powinien być nieaktywny");
+        }
+    }
 }
