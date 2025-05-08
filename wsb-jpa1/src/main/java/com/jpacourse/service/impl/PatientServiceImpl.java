@@ -7,7 +7,8 @@ import com.jpacourse.mapper.VisitMapper;
 import com.jpacourse.persistance.dao.PatientDao;
 import com.jpacourse.persistance.entity.PatientEntity;
 import com.jpacourse.service.PatientService;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ import java.util.List;
 @Service
 @Transactional
 public class PatientServiceImpl implements PatientService {
+
+    @Autowired
+    private EntityManager entityManager;
 
     private final PatientDao patientDao;
 
@@ -46,5 +50,13 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void deleteById(Long id) {
         patientDao.delete(id);
+    }
+
+    @Override
+    public PatientEntity findByIdWithVisits(Long patientId) {
+        String jpql = "SELECT p FROM PatientEntity p LEFT JOIN FETCH p.visits WHERE p.id = :patientId";
+        TypedQuery<PatientEntity> query = entityManager.createQuery(jpql, PatientEntity.class);
+        query.setParameter("patientId", patientId);
+        return query.getSingleResult();
     }
 }

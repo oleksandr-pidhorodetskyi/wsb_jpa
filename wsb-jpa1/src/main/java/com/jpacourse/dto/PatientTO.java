@@ -13,7 +13,9 @@ public class PatientTO implements Serializable {
     private String patientNumber;
     private LocalDate dateOfBirth;
     private boolean active; // dodatkowe pole
+    private List<VisitTO> visits;
     private List<VisitTO> pastVisits;
+    private int version;
 
     public Long getId() {
         return id;
@@ -85,5 +87,21 @@ public class PatientTO implements Serializable {
 
     public void setPastVisits(List<VisitTO> pastVisits) {
         this.pastVisits = pastVisits;
+    }
+
+    public List<VisitTO> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<VisitTO> visits) {
+        this.visits = visits;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
